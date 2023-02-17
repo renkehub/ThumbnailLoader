@@ -70,7 +70,7 @@ void Gallery::waitThumbnailLoading()
 
 void Gallery::addImageFile(const QString& path)
 {
-    waitThumbnailLoading();
+//    waitThumbnailLoading();
     QImage img(path);
     QIcon ico = m_loader->createStandardIcon(img);
     QFileInfo info(path);
@@ -97,7 +97,6 @@ void Gallery::on_pushButton_clicked()
     QString icoDir = ui->lineEdit->text();
     if (!icoDir.isEmpty())
     {
-        stopThumbnailLoading();
         setGalleryPath(icoDir);
     }
 }

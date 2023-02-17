@@ -3,6 +3,7 @@
 #include <QPainter>
 #include "ThumbnailCache.h"
 #include <QStandardPaths>
+#include <QImageReader>
 #include <QDebug>
 const int ICON_SIZE = 200;
 
@@ -70,7 +71,9 @@ bool ThumbnailLoader::insertThumbnail(std::pair<int, QFileInfo> index_location)
     }
     else
     {
-        img = QImage(filepath);
+        QImageReader reader(filepath);
+        reader.setScaledSize(QSize(ICON_SIZE,ICON_SIZE));
+        img = reader.read();
         ico = createStandardIcon(img,filepath);
     }
     emit requiresItemRefresh(index_location.first, ico);
