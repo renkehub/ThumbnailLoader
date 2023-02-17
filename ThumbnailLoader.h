@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QIcon>
 #include <QFileInfo>
+#include <QStandardItem>
 
 class ThumbnailCache;
 
@@ -13,14 +14,14 @@ public:
     ThumbnailLoader();
     ~ThumbnailLoader();
 
-    bool insertThumbnail(std::pair<int, QFileInfo> index_location);
+    bool insertThumbnail(std::pair<QStandardItem*, QFileInfo> index_location);
     void setFillColor(QColor cr)
     {
         m_fillColor = cr;
     }
     QIcon createStandardIcon(const QImage &img,const QString& path = QString());
 signals:
-    void requiresItemRefresh(int index, const QIcon& icon);
+    void requiresItemRefresh(QStandardItem* item, const QIcon& icon);
 
 private:
     QColor m_fillColor;

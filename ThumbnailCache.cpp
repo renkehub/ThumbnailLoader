@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QDateTime>
 
-const unsigned int ThumbnailCache::MaxCachedFiles = 200;
+const unsigned int ThumbnailCache::MaxCachedFiles = 1000;
 
 ThumbnailCache::ThumbnailCache(const QString& cacheFolder) : m_cacheFolder(cacheFolder + "/thumbnails"), m_nrCachedFiles(0)
 {

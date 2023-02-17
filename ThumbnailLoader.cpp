@@ -59,7 +59,7 @@ QIcon ThumbnailLoader::createStandardIcon(const QImage& img, const QString& path
     return  QIcon(pixmap);
 }
 
-bool ThumbnailLoader::insertThumbnail(std::pair<int, QFileInfo> index_location)
+bool ThumbnailLoader::insertThumbnail(std::pair<QStandardItem *, QFileInfo> index_location)
 {
     QString filepath = index_location.second.filePath();
     QImage img = m_thumbnail_cache->getThumbnailFromCache(filepath);

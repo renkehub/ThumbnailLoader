@@ -7,6 +7,7 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include <QScrollBar>
+#include <QStandardItem>
 
 Gallery::Gallery(QWidget* parent) :
     QWidget(parent),
@@ -101,11 +102,12 @@ void Gallery::on_pushButton_clicked()
     }
 }
 
-void Gallery::onRequiresItemRefresh(int index, const QIcon& icon)
+void Gallery::onRequiresItemRefresh(QStandardItem *item, const QIcon& icon)
 {
-    if (index >= 0)
+    if (item)
     {
-        m_model->item(index)->setIcon(icon);
+//        m_model->item(item)->setIcon(icon);
+        item->setIcon(icon);
     }
     else
     {
@@ -125,15 +127,16 @@ std::unique_ptr<QFutureWatcher<bool> > Gallery::updateGallery()
     for (size_t item = 0; item < m_index_locations.size(); ++item)
     {
         QStandardItem* standard_item(new QStandardItem(placeholder, m_index_locations[item].second.fileName()));
-        standard_item->setData(QVariant(QString::number(m_index_locations[item].first)));
+//        standard_item->setData(QVariant(QString::number(m_index_locations[item].first)));
         standard_item->setData(QVariant(m_index_locations[item].second.filePath()), Qt::UserRole + 2);
+        m_index_locations[item].first = standard_item;
         m_model->setItem(item, 0, standard_item);
     }
     auto icon_connection = QObject::connect(m_loader,
                                             &ThumbnailLoader::requiresItemRefresh,
                                             this,
                                             &Gallery::onRequiresItemRefresh);
-    std::function<bool(const std::pair<int, QFileInfo> & index_location)> create_icons = [creator = m_loader](const std::pair<int, QFileInfo>& index_location) -> bool
+    std::function<bool(const std::pair<QStandardItem*, QFileInfo> & index_location)> create_icons = [creator = m_loader](const std::pair<QStandardItem*, QFileInfo>& index_location) -> bool
     {
         bool valid = creator->insertThumbnail(index_location);
         return valid;
@@ -196,7 +199,7 @@ void Gallery::setGalleryPath(const QString& path)
         for (int idx = 0; idx < delInfoList.size(); idx++)
         {
             QFileInfo info = delInfoList[idx];
-            m_index_locations.append(std::pair<int, QFileInfo>(idx, info));
+            m_index_locations.append(std::pair<QStandardItem*, QFileInfo>(nullptr, info));
         }
         stopThumbnailLoading();
         m_watcher = updateGallery();

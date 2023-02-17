@@ -30,7 +30,7 @@ public:
 private slots:
     void on_toolButton_clicked();
     void on_pushButton_clicked();
-    void onRequiresItemRefresh(int index,const QIcon& icon);
+    void onRequiresItemRefresh(QStandardItem* item,const QIcon& icon);
 
     void on_toolButton_2_clicked();
 
@@ -43,7 +43,7 @@ private:
     QStandardItemModel* m_model;
     std::unique_ptr<QFutureWatcher<bool> > m_watcher;
     ThumbnailLoader* m_loader;
-    QList<std::pair<int, QFileInfo>> m_index_locations;
+    QList<std::pair<QStandardItem*, QFileInfo>> m_index_locations;
     int m_lastScroolVal;
     QDir m_galleryDir;
 };
